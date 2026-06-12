@@ -6,7 +6,7 @@ import { z } from "zod";
 import { createReservation, getMenuItems } from "@/lib/data";
 
 const reservationSchema = z.object({
-  orderType: z.enum(["lunchbox", "catering"]),
+  orderType: z.enum(["picnic", "lunchbox", "catering"]),
   menuItemId: z.string().min(1),
   quantity: z.coerce.number().int().positive(),
   customerName: z.string().trim().min(2),

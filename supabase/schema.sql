@@ -10,7 +10,7 @@ create table if not exists public.menu_items (
   id text primary key,
   category_id uuid references public.menu_categories(id),
   category text,
-  type text not null check (type in ('lunchbox', 'catering')),
+  type text not null check (type in ('picnic', 'lunchbox', 'catering')),
   name text not null,
   description text not null,
   price integer not null check (price >= 0),
@@ -25,7 +25,7 @@ create table if not exists public.menu_items (
 create table if not exists public.reservations (
   id uuid primary key default gen_random_uuid(),
   reservation_number text not null unique,
-  order_type text not null check (order_type in ('lunchbox', 'catering')),
+  order_type text not null check (order_type in ('picnic', 'lunchbox', 'catering')),
   customer_name text not null,
   customer_phone text not null,
   delivery_address text not null,

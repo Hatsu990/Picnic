@@ -1,4 +1,4 @@
-export type OrderType = "lunchbox" | "catering";
+export type OrderType = "picnic" | "lunchbox" | "catering";
 
 export type ReservationStatus =
   | "pending"

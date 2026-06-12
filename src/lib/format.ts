@@ -1,4 +1,4 @@
-import type { PaymentMethod, ReservationStatus } from "./types";
+import type { OrderType, PaymentMethod, ReservationStatus } from "./types";
 
 export function formatCurrency(value: number) {
   return new Intl.NumberFormat("ko-KR", {
@@ -8,8 +8,13 @@ export function formatCurrency(value: number) {
   }).format(value);
 }
 
-export function formatOrderType(type: "lunchbox" | "catering") {
-  return type === "lunchbox" ? "도시락" : "케이터링";
+export function formatOrderType(type: OrderType) {
+  const labels: Record<OrderType, string> = {
+    picnic: "소풍 메뉴",
+    lunchbox: "도시락",
+    catering: "케이터링",
+  };
+  return labels[type];
 }
 
 export function formatPaymentMethod(method: PaymentMethod) {

@@ -263,7 +263,8 @@ label {
 
 input,
 select,
-textarea {
+textarea,
+.readonly-field {
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -272,6 +273,11 @@ textarea {
   min-height: 44px;
   padding: 10px 12px;
   width: 100%;
+}
+
+.readonly-field {
+  align-items: center;
+  display: flex;
 }
 
 textarea {
@@ -336,6 +342,10 @@ th {
 .status-cancelled {
   background: #f2e2df;
   color: #803226;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 820px) {

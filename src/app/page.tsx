@@ -9,11 +9,11 @@ export default async function HomePage() {
     <>
       <section className="hero">
         <div className="hero-copy">
-          <p className="eyebrow">도시락 배달 · 케이터링 예약</p>
+          <p className="eyebrow">소풍 카페 메뉴 · 예약 주문</p>
           <h1>Picnic</h1>
           <p>
-            회의, 촬영, 행사, 소모임에 맞는 도시락과 케이터링을 고르고
-            원하는 날짜에 예약하세요.
+            포케, 커피, 블렌딩 티, 라떼, 에이드, 디저트를 한눈에 보고
+            원하는 날짜에 예약 요청을 남겨주세요.
           </p>
           <div className="action-row">
             <Link className="button primary" href="/reserve">
@@ -28,19 +28,19 @@ export default async function HomePage() {
           <img
             className="hero-image"
             src="/images/picnic-hero.png"
-            alt="Picnic 도시락과 케이터링 이미지"
+            alt="Picnic 소풍 메뉴 이미지"
           />
           <div>
-            <span className="metric">30분</span>
-            <span>예약 접수 확인 목표</span>
+            <span className="metric">27종</span>
+            <span>소풍 메뉴 등록</span>
           </div>
           <div>
-            <span className="metric">2종</span>
-            <span>도시락 / 케이터링</span>
+            <span className="metric">5종</span>
+            <span>포케 메뉴</span>
           </div>
           <div>
-            <span className="metric">3가지</span>
-            <span>결제 방식 선택</span>
+            <span className="metric">추가 예정</span>
+            <span>도시락 메뉴</span>
           </div>
         </div>
       </section>
@@ -48,7 +48,7 @@ export default async function HomePage() {
       <section className="section">
         <div className="section-heading">
           <p className="eyebrow">대표 메뉴</p>
-          <h2>예약 가능한 메뉴</h2>
+          <h2>소풍 메뉴</h2>
         </div>
         <div className="card-grid">
           {featuredItems.map((item) => (
@@ -59,7 +59,7 @@ export default async function HomePage() {
                 alt={`${item.name} 이미지`}
               />
               <div className="menu-card-body">
-                <p className="tag">{item.type === "lunchbox" ? "도시락" : "케이터링"}</p>
+                <p className="tag">{item.category}</p>
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>
                 <strong>{formatCurrency(item.price)}</strong>

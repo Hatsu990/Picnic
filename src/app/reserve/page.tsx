@@ -14,7 +14,7 @@ type ReservePageProps = {
 export default async function ReservePage({ searchParams }: ReservePageProps) {
   const params = await searchParams;
   const menuItems = await getMenuItems();
-  const selectedType = params?.type ?? "lunchbox";
+  const selectedType = params?.type ?? "picnic";
   const visibleItems = menuItems.filter((item) => item.type === selectedType);
   const selectedItem =
     visibleItems.find((item) => item.id === params?.menuItemId) ?? visibleItems[0];
@@ -24,27 +24,28 @@ export default async function ReservePage({ searchParams }: ReservePageProps) {
       <div className="page-title">
         <p className="eyebrow">예약</p>
         <h1>예약 요청하기</h1>
-        <p>실제 결제는 아직 진행하지 않습니다. 운영자가 예약 내용을 확인한 뒤 연락합니다.</p>
+        <p>
+          실제 결제는 아직 진행하지 않습니다. 운영자가 예약 내용을 확인한 뒤
+          연락합니다.
+        </p>
       </div>
 
       {params?.error ? <div className="error-box">{params.error}</div> : null}
 
       <form action={createReservationAction} className="panel form-grid">
+        <input type="hidden" name="orderType" value={selectedType} />
+
         <div className="field">
-          <label htmlFor="orderType">주문 유형</label>
-          <select id="orderType" name="orderType" defaultValue={selectedType}>
-            <option value="lunchbox">도시락</option>
-            <option value="catering">케이터링</option>
-          </select>
+          <label>주문 유형</label>
+          <div className="readonly-field">{formatOrderType(selectedType)}</div>
         </div>
 
         <div className="field">
           <label htmlFor="menuItemId">메뉴</label>
           <select id="menuItemId" name="menuItemId" defaultValue={selectedItem?.id}>
-            {menuItems.map((item) => (
+            {visibleItems.map((item) => (
               <option key={item.id} value={item.id}>
-                {formatOrderType(item.type)} · {item.name} ·{" "}
-                {formatCurrency(item.price)}
+                {item.name} · {formatCurrency(item.price)}
               </option>
             ))}
           </select>

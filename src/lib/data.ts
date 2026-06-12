@@ -32,7 +32,9 @@ export async function getMenuItems(): Promise<MenuItem[]> {
     name: item.name,
     description: item.description,
     price: item.price,
-    imageUrl: item.image_url ?? (item.type === "lunchbox" ? "/images/lunchbox.png" : "/images/catering.png"),
+    imageUrl:
+      item.image_url ??
+      (item.type === "lunchbox" ? "/images/lunchbox.png" : "/images/catering.png"),
     minimumQuantity: item.minimum_quantity,
     isAvailable: item.is_available,
   }));
