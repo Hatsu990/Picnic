@@ -24,3 +24,12 @@
 - 진행한 요청: 임시 도시락/케이터링 샘플 메뉴를 실제 소풍 메뉴로 교체했다. 포케, 커피, 블렌딩 티, 허브차, 라떼, 에이드, 디저트 항목을 추가했다.
 - 적용한 변경 사항: `picnic` 주문 유형을 추가하고, 메뉴 페이지 필터와 예약 폼을 소풍 메뉴 중심으로 수정했다. 도시락 필터는 남겨두되 아직 등록 메뉴가 없으면 빈 상태를 보여주게 했다.
 - 검증 결과: `npm run typecheck`와 `npm run build`가 통과했다. GStack으로 메뉴 페이지에 연어 포케, 목살 포케, 핸드드립 hot, 플레인 스콘 등이 표시되는 것을 확인했다. 예약 폼에서도 새 메뉴들이 선택지로 보였고, 연어 포케 예약 제출과 완료 화면 접수번호 표시를 확인했다.
+
+## 2026-06-12 - Supabase 연결 준비와 관리자 보호
+
+- 사용자 의도: 다음 단계로 Supabase 실제 연결과 관리자 로그인/보안을 모두 진행해 달라고 했다.
+- 확인한 단서: 현재 로컬 환경에는 `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET` 값이 없었다. Supabase MCP는 사용 가능하지만 현재 read-only 설정이라 DB 마이그레이션 적용 같은 쓰기 작업은 할 수 없었다.
+- 진행한 요청: Supabase 실제 연결에 필요한 SQL, seed, 환경변수 안내, 연결 확인 스크립트를 추가했다. 관리자 화면은 `ADMIN_PASSWORD`와 `ADMIN_SESSION_SECRET` 기반 로그인으로 보호하고, httpOnly 서명 쿠키와 Next.js 16 `src/proxy.ts` 프록시로 `/admin` 하위 경로를 막았다.
+- 확인한 원인과 단서: 처음에는 `middleware.ts`/루트 `proxy.ts`가 보호를 적용하지 못했다. Next.js 16과 `src/app` 구조에서는 `src/proxy.ts` 위치에서 빌드 출력에 `Proxy (Middleware)`가 잡혔다.
+- 검증 결과: Supabase 키가 없어서 `npm run check:supabase`는 키 없음 오류로 실패했다. 이는 현재 환경에서는 정상이다. 테스트용 관리자 환경변수를 넣고 실행했을 때 빈 쿠키 요청은 `/admin/login?next=%2Fadmin`으로 307 리다이렉트되었고, 테스트 비밀번호 입력 후 `/admin` 예약 목록에 접근되는 것을 Playwright로 확인했다. `npm run typecheck`와 `npm run build`도 통과했다.
+- 남은 주의사항: 실제 Supabase 프로젝트에 `supabase/schema.sql`과 `supabase/seed.sql`을 적용하고 `.env.local`에 키를 넣은 뒤 `npm run check:supabase`로 실제 DB 연결을 다시 검증해야 한다. 운영 전에는 현재 임시 관리자 비밀번호 방식을 Supabase Auth 기반 관리자 계정으로 교체하는 것이 더 안전하다.

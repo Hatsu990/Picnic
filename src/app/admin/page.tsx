@@ -34,6 +34,11 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         <p className="eyebrow">관리자</p>
         <h1>예약 관리</h1>
         <p>접수된 예약을 확인하고 상태를 변경합니다.</p>
+        <div className="action-row">
+          <a className="button secondary" href="/admin/logout">
+            로그아웃
+          </a>
+        </div>
       </div>
 
       <div className="filter-row">

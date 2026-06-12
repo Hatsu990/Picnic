@@ -100,6 +100,9 @@ export default async function ReservationDetailPage({
         <Link className="button secondary" href="/admin">
           목록으로
         </Link>
+        <a className="button secondary" href="/admin/logout">
+          로그아웃
+        </a>
       </div>
     </div>
   );

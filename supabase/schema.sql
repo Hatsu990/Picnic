@@ -72,3 +72,28 @@ create table if not exists public.reviews (
   approval_status text not null default 'pending',
   created_at timestamptz not null default now()
 );
+
+alter table public.menu_categories enable row level security;
+alter table public.menu_items enable row level security;
+alter table public.reservations enable row level security;
+alter table public.reservation_items enable row level security;
+alter table public.admin_users enable row level security;
+alter table public.reviews enable row level security;
+
+drop policy if exists "Public can read menu categories" on public.menu_categories;
+create policy "Public can read menu categories"
+  on public.menu_categories
+  for select
+  using (true);
+
+drop policy if exists "Public can read available menu items" on public.menu_items;
+create policy "Public can read available menu items"
+  on public.menu_items
+  for select
+  using (is_available = true);
+
+drop policy if exists "Public can read approved reviews" on public.reviews;
+create policy "Public can read approved reviews"
+  on public.reviews
+  for select
+  using (approval_status = 'approved');

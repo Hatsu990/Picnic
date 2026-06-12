@@ -227,6 +227,17 @@ button.primary {
   padding: 48px 32px;
 }
 
+.auth-shell {
+  display: grid;
+  min-height: calc(100vh - 64px);
+  place-items: center;
+}
+
+.auth-panel {
+  max-width: 520px;
+  width: 100%;
+}
+
 .page-title {
   max-width: 760px;
 }
