@@ -1,10 +1,10 @@
-# Retrospective
+# 회고
 
-## 2026-06-12 - MVP Scope And Design
+## 2026-06-12 - MVP 범위와 설계
 
-- User intent: Build Picnic as a cafe-style lunchbox delivery and catering reservation website, with a future path to login, payment, coupons, reviews, and marketing automation.
-- Request handled: Used brainstorming to reduce the initial product idea into a B+ MVP: guest reservations and admin reservation handling first, with extension points for later C-level commerce features.
-- Evidence checked: The workspace was empty except for local `.omx` and `.superpowers` folders. Git was not initialized. `git ls-remote` against `Hatsu990/Picnic` returned no refs, suggesting the remote repository is empty or has no commits.
-- Decisions made: Use Next.js App Router and Supabase. Do not implement live payment, Naver OAuth, Solapi, or review writing in the first MVP. Keep the database and code structure ready for those integrations.
-- Applied changes: Initialized Git, added MVP design spec, added a minimal `.gitignore`, and started this retrospective log.
-- Validation result: Brainstorm companion click event confirmed approval of the B+ MVP direction.
+- 사용자 의도: Picnic을 카페형 도시락 배달 및 케이터링 예약 웹사이트로 만든다. 이후 로그인, 결제, 쿠폰, 리뷰, 마케팅 자동화까지 확장할 수 있어야 한다.
+- 진행한 요청: 초기 아이디어를 B+ MVP로 정리했다. 1차는 게스트 예약과 관리자 예약 처리를 먼저 만들고, 이후 C 단계 기능을 붙일 수 있는 구조를 남긴다.
+- 확인한 단서: 작업 폴더에는 로컬 `.omx`, `.superpowers` 폴더만 있었고 Git이 초기화되어 있지 않았다. `Hatsu990/Picnic` 원격 저장소는 ref가 비어 있어 아직 커밋이 없는 저장소로 판단했다.
+- 결정 사항: Next.js App Router와 Supabase를 사용한다. 1차 MVP에는 실제 결제, 네이버 OAuth, Solapi, 리뷰 작성 기능을 넣지 않는다. 대신 나중에 붙일 수 있도록 DB와 코드 구조에 확장 지점을 남긴다.
+- 적용한 변경: Git을 초기화하고 MVP 설계 문서, 최소 `.gitignore`, 회고 로그를 추가했다.
+- 검증 결과: Brainstorm companion 클릭 이벤트에서 B+ MVP 방향 승인 선택을 확인했다.
