@@ -7,6 +7,11 @@ node_modules/
 out/
 dist/
 coverage/
+.vercel/
+tsconfig.tsbuildinfo
+*.log
+qa-*.png
 
 .omx/
 .superpowers/
+.gstack/
