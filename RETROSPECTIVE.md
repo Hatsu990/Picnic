@@ -41,3 +41,11 @@
 - 확인한 원인과 단서: 기존 메뉴 검수에서 말차 스콘, 플레인 휘낭시에, 핸드드립 iced가 누락되어 있었다. 홈 화면 카운트도 27종으로 남아 있었다.
 - 적용한 변경 사항: `src/lib/demo-data.ts`, `supabase/seed.sql`, `supabase/setup-all.sql`에 소풍 메뉴 30개를 맞추고, 홈 화면 표시를 30종으로 수정했다.
 - 검증 결과: 로컬 파일 기준 demo 메뉴 30개, seed SQL 30개, 통합 SQL 30개를 확인했다. 사용자가 Supabase SQL 편집기에서 실행한 결과 화면에 `Success. No rows returned`가 표시되어 테이블 생성과 seed 실행이 성공한 것으로 확인했다.
+
+## 2026-06-13 - Supabase 실제 연결 검증
+
+- 사용자 의도: Supabase에서 복사한 `anon public`과 `service_role` 키를 로컬 앱에 연결해 실제 DB를 읽게 만들고 싶어 했다.
+- 진행한 요청: `.env.local`을 생성하고 Supabase URL, anon 키, service role 키, 임시 관리자 비밀번호와 세션 시크릿을 채웠다.
+- 확인한 원인과 단서: 처음 `npm run check:supabase`에서 `fetch failed`와 `ENOTFOUND`가 발생했다. 복사한 JWT의 `ref`를 확인한 결과 실제 프로젝트 ref는 `rkctmybesyatvgriwfke`였고, 로컬 URL에는 `rkctmybesyatvgrivvfke`로 잘못 적혀 있었다.
+- 적용한 변경 사항: `.env.local`의 Supabase URL을 실제 프로젝트 ref 기준으로 수정했다. 비밀 키 값은 로그와 회고에 남기지 않았다.
+- 검증 결과: DNS 확인이 성공했고 `npm run check:supabase`에서 `menu_items: 30`, `reservations: 0`을 확인했다. `npm run dev -- -p 3000`으로 앱을 띄운 뒤 `/menu`에서 연어 포케, 핸드드립 iced, 말차 스콘, 플레인 휘낭시에가 HTML에 포함되는 것을 확인했다.
