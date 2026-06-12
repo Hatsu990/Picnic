@@ -33,3 +33,11 @@
 - 확인한 원인과 단서: 처음에는 `middleware.ts`/루트 `proxy.ts`가 보호를 적용하지 못했다. Next.js 16과 `src/app` 구조에서는 `src/proxy.ts` 위치에서 빌드 출력에 `Proxy (Middleware)`가 잡혔다.
 - 검증 결과: Supabase 키가 없어서 `npm run check:supabase`는 키 없음 오류로 실패했다. 이는 현재 환경에서는 정상이다. 테스트용 관리자 환경변수를 넣고 실행했을 때 빈 쿠키 요청은 `/admin/login?next=%2Fadmin`으로 307 리다이렉트되었고, 테스트 비밀번호 입력 후 `/admin` 예약 목록에 접근되는 것을 Playwright로 확인했다. `npm run typecheck`와 `npm run build`도 통과했다.
 - 남은 주의사항: 실제 Supabase 프로젝트에 `supabase/schema.sql`과 `supabase/seed.sql`을 적용하고 `.env.local`에 키를 넣은 뒤 `npm run check:supabase`로 실제 DB 연결을 다시 검증해야 한다. 운영 전에는 현재 임시 관리자 비밀번호 방식을 Supabase Auth 기반 관리자 계정으로 교체하는 것이 더 안전하다.
+
+## 2026-06-13 - Supabase SQL 적용과 메뉴 검수
+
+- 사용자 의도: Supabase SQL 편집기에서 어떤 내용을 실행해야 하는지 복붙 가능한 형태로 확인하고, 현재 소풍 메뉴가 빠짐없이 들어갔는지 검수하길 원했다.
+- 진행한 요청: `supabase/setup-all.sql` 통합 SQL을 만들어 클립보드에 복사하고, SQL 편집기에 붙여넣어 실행하도록 안내했다.
+- 확인한 원인과 단서: 기존 메뉴 검수에서 말차 스콘, 플레인 휘낭시에, 핸드드립 iced가 누락되어 있었다. 홈 화면 카운트도 27종으로 남아 있었다.
+- 적용한 변경 사항: `src/lib/demo-data.ts`, `supabase/seed.sql`, `supabase/setup-all.sql`에 소풍 메뉴 30개를 맞추고, 홈 화면 표시를 30종으로 수정했다.
+- 검증 결과: 로컬 파일 기준 demo 메뉴 30개, seed SQL 30개, 통합 SQL 30개를 확인했다. 사용자가 Supabase SQL 편집기에서 실행한 결과 화면에 `Success. No rows returned`가 표시되어 테이블 생성과 seed 실행이 성공한 것으로 확인했다.

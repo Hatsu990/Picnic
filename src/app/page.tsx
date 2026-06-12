@@ -31,7 +31,7 @@ export default async function HomePage() {
             alt="Picnic 소풍 메뉴 이미지"
           />
           <div>
-            <span className="metric">27종</span>
+            <span className="metric">30종</span>
             <span>소풍 메뉴 등록</span>
           </div>
           <div>
