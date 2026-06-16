@@ -4,6 +4,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createReservation, getMenuItems } from "@/lib/data";
+import {
+  getKoreaDateValue,
+  isPokeMenu,
+  pokeDressings,
+  pokeToppings,
+  requiresAdvanceReservation,
+} from "@/lib/reservation-options";
 
 const reservationSchema = z.object({
   orderType: z.enum(["picnic", "lunchbox", "catering"]),
@@ -51,7 +58,67 @@ export async function createReservationAction(formData: FormData) {
     );
   }
 
-  const reservation = await createReservation(parsed.data);
+  if (requiresAdvanceReservation(menuItem.id)) {
+    if (parsed.data.deliveryDate < getKoreaDateValue(1)) {
+      redirect(
+        `/reserve?type=${menuItem.type}&menuItemId=${menuItem.id}&error=예약 메뉴는 최소 하루 전 예약만 가능합니다.`,
+      );
+    }
+  }
+
+  let optionSummary = "";
+  let extraAmount = 0;
+
+  if (isPokeMenu(menuItem.id)) {
+    const selectedDressings = formData
+      .getAll("pokeDressings")
+      .map(String)
+      .filter((dressing) =>
+        (pokeDressings as readonly string[]).includes(dressing),
+      );
+
+    const selectedToppings = pokeToppings
+      .map((topping) => {
+        const quantity = Number(formData.get(`topping-${topping.id}`) ?? 0);
+        return {
+          ...topping,
+          quantity: Number.isFinite(quantity) && quantity > 0 ? Math.floor(quantity) : 0,
+        };
+      })
+      .filter((topping) => topping.quantity > 0);
+
+    extraAmount = selectedToppings.reduce(
+      (sum, topping) => sum + topping.price * topping.quantity,
+      0,
+    );
+
+    const dressingText =
+      selectedDressings.length > 0 ? selectedDressings.join(", ") : "선택 없음";
+    const toppingText =
+      selectedToppings.length > 0
+        ? selectedToppings
+            .map(
+              (topping) =>
+                `${topping.name} ${topping.quantity}회 (+${(
+                  topping.price * topping.quantity
+                ).toLocaleString("ko-KR")}원)`,
+            )
+            .join(", ")
+        : "추가 없음";
+
+    optionSummary = [
+      "[포케 옵션]",
+      `드레싱: ${dressingText}`,
+      `토핑: ${toppingText}`,
+      `추가금: ${extraAmount.toLocaleString("ko-KR")}원`,
+    ].join("\n");
+  }
+
+  const reservation = await createReservation({
+    ...parsed.data,
+    optionSummary,
+    extraAmount,
+  });
 
   revalidatePath("/admin");
   redirect(

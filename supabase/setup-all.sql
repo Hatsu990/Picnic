@@ -133,7 +133,10 @@ values
   ('dessert-mochi', '디저트', 'picnic', '모찌', '망고, 딸기요거트, 녹차, 라즈베리, 민트초코', 4000, '/images/menu/dessert-mochi.jpg', 1, true, 270),
   ('dessert-plain-scone', '디저트', 'picnic', '플레인 스콘', '담백하게 즐기는 플레인 스콘', 3500, '/images/menu/dessert-plain-scone.jpg', 1, true, 280),
   ('dessert-matcha-scone', '디저트', 'picnic', '말차 스콘', '말차 향을 더한 스콘', 3800, '/images/menu/dessert-matcha-scone.jpg', 1, true, 290),
-  ('dessert-plain-financier', '디저트', 'picnic', '플레인 휘낭시에', '고소하고 촉촉한 플레인 휘낭시에', 2800, '/images/menu/dessert-plain-financier.jpg', 1, true, 300)
+  ('dessert-plain-financier', '디저트', 'picnic', '플레인 휘낭시에', '고소하고 촉촉한 플레인 휘낭시에', 2800, '/images/menu/dessert-plain-financier.jpg', 1, true, 300),
+  ('reservation-fajita', '예약 메뉴', 'catering', '화이타', '불향 가득한 소고기와 새우, 채소를 또띠아에 싸 먹는 멕시칸 요리. 2인 기준, 최소 하루 전 예약', 34000, '/images/reservation/reservation-fajita.jpg', 1, true, 310),
+  ('reservation-vietnamese-wrap', '예약 메뉴', 'catering', '월남쌈', '신선한 채소와 고기, 해산물을 라이스페이퍼에 싸서 즐기는 베트남식 쌈 요리. 2인 기준, 최소 하루 전 예약', 28000, '/images/reservation/reservation-vietnamese-wrap.jpg', 1, true, 320),
+  ('reservation-la-gimbap', '예약 메뉴', 'catering', 'LA 김밥', '다양한 재료를 구운 김에 싸 먹는 오픈형 김밥 요리. 2인 기준, 최소 하루 전 예약', 24000, '/images/reservation/reservation-la-gimbap.jpg', 1, true, 330)
 on conflict (id) do update set
   category = excluded.category,
   type = excluded.type,

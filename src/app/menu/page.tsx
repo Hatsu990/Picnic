@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getMenuItems } from "@/lib/data";
 import { formatCurrency, formatOrderType } from "@/lib/format";
+import { requiresAdvanceReservation } from "@/lib/reservation-options";
 import type { OrderType } from "@/lib/types";
 
 type MenuPageProps = {
@@ -13,6 +14,7 @@ const filterOptions: Array<{ label: string; href: string }> = [
   { label: "전체", href: "/menu" },
   { label: "소풍 메뉴", href: "/menu?type=picnic" },
   { label: "도시락", href: "/menu?type=lunchbox" },
+  { label: "예약 메뉴", href: "/menu?type=catering" },
 ];
 
 export default async function MenuPage({ searchParams }: MenuPageProps) {
@@ -58,6 +60,9 @@ export default async function MenuPage({ searchParams }: MenuPageProps) {
               <h2>{item.name}</h2>
               <p>{item.description}</p>
               <p>최소 주문 {item.minimumQuantity}개</p>
+              {requiresAdvanceReservation(item.id) ? (
+                <p className="menu-warning">최소 하루 전 예약 가능 · 당일 수령 불가</p>
+              ) : null}
               <strong>{formatCurrency(item.price)}</strong>
               <div className="action-row">
                 <Link

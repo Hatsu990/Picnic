@@ -64,4 +64,6 @@ export type CreateReservationInput = {
   deliveryTime: string;
   requestNote: string;
   paymentMethod: PaymentMethod;
+  optionSummary?: string;
+  extraAmount?: number;
 };

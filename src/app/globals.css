@@ -248,6 +248,21 @@ button.primary {
   margin-bottom: 8px;
 }
 
+.menu-warning,
+.notice-box {
+  background: #fff0ed;
+  border: 1px solid #efb0a5;
+  border-radius: 8px;
+  color: #8d2f22;
+  font-weight: 800;
+  padding: 12px;
+}
+
+.menu-warning {
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
 .band {
   background: #edf4ec;
 }
@@ -302,6 +317,58 @@ button.primary {
 
 .field.full {
   grid-column: 1 / -1;
+}
+
+.option-panel {
+  background: #f8f3ea;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.option-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.checkbox-list,
+.topping-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.check-row,
+.topping-row {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.check-row {
+  justify-content: flex-start;
+}
+
+.check-row input {
+  min-height: auto;
+  width: auto;
+}
+
+.topping-row small {
+  color: var(--muted);
+  display: block;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.topping-row input {
+  flex: 0 0 82px;
 }
 
 label {
@@ -404,6 +471,7 @@ th {
   .card-grid,
   .store-story,
   .store-gallery,
+  .option-grid,
   .steps,
   .filter-row,
   .form-grid {

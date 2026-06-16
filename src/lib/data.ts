@@ -53,7 +53,10 @@ export async function createReservation(
   const now = new Date();
   const reservationId = crypto.randomUUID();
   const reservationNumber = `PIC-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${reservationId.slice(0, 6).toUpperCase()}`;
-  const totalAmount = menuItem.price * input.quantity;
+  const totalAmount = menuItem.price * input.quantity + (input.extraAmount ?? 0);
+  const requestNote = [input.requestNote, input.optionSummary]
+    .filter(Boolean)
+    .join("\n\n");
 
   const { data: reservation, error: reservationError } = await supabase
     .from("reservations")
@@ -67,7 +70,7 @@ export async function createReservation(
       delivery_detail_address: input.deliveryDetailAddress,
       delivery_date: input.deliveryDate,
       delivery_time: input.deliveryTime,
-      request_note: input.requestNote,
+      request_note: requestNote,
       payment_method: input.paymentMethod,
       reservation_status: "pending",
       total_amount: totalAmount,

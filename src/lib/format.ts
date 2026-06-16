@@ -12,7 +12,7 @@ export function formatOrderType(type: OrderType) {
   const labels: Record<OrderType, string> = {
     picnic: "소풍 메뉴",
     lunchbox: "도시락",
-    catering: "케이터링",
+    catering: "예약 메뉴",
   };
   return labels[type];
 }

@@ -1,6 +1,13 @@
 import { createReservationAction } from "./actions";
 import { getMenuItems } from "@/lib/data";
 import { formatCurrency, formatOrderType } from "@/lib/format";
+import {
+  getKoreaDateValue,
+  isPokeMenu,
+  pokeDressings,
+  pokeToppings,
+  requiresAdvanceReservation,
+} from "@/lib/reservation-options";
 import type { OrderType } from "@/lib/types";
 
 type ReservePageProps = {
@@ -18,6 +25,11 @@ export default async function ReservePage({ searchParams }: ReservePageProps) {
   const visibleItems = menuItems.filter((item) => item.type === selectedType);
   const selectedItem =
     visibleItems.find((item) => item.id === params?.menuItemId) ?? visibleItems[0];
+  const showPokeOptions = selectedItem ? isPokeMenu(selectedItem.id) : false;
+  const isAdvanceReservation = selectedItem
+    ? requiresAdvanceReservation(selectedItem.id)
+    : false;
+  const tomorrowValue = getKoreaDateValue(1);
 
   return (
     <div className="page-shell">
@@ -63,9 +75,67 @@ export default async function ReservePage({ searchParams }: ReservePageProps) {
           />
         </div>
 
+        {showPokeOptions ? (
+          <section className="option-panel field full">
+            <div>
+              <p className="eyebrow">포케 옵션</p>
+              <h2>드레싱과 토핑 추가</h2>
+              <p>
+                드레싱은 여러 개 선택할 수 있습니다. 토핑 추가 금액은 예약 총액에
+                자동으로 반영됩니다.
+              </p>
+            </div>
+            <div className="option-grid">
+              <div>
+                <strong>드레싱 선택</strong>
+                <div className="checkbox-list">
+                  {pokeDressings.map((dressing) => (
+                    <label className="check-row" key={dressing}>
+                      <input name="pokeDressings" type="checkbox" value={dressing} />
+                      <span>{dressing}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <strong>토핑 추가</strong>
+                <div className="topping-list">
+                  {pokeToppings.map((topping) => (
+                    <label className="topping-row" key={topping.id}>
+                      <span>
+                        {topping.name}
+                        <small>{formatCurrency(topping.price)} / 1회</small>
+                      </span>
+                      <input
+                        defaultValue="0"
+                        min="0"
+                        name={`topping-${topping.id}`}
+                        type="number"
+                      />
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        {isAdvanceReservation ? (
+          <div className="notice-box field full">
+            이 메뉴는 준비 시간이 필요해 최소 하루 전 예약만 가능합니다. 당일 수령
+            예약은 접수되지 않습니다.
+          </div>
+        ) : null}
+
         <div className="field">
           <label htmlFor="deliveryDate">예약 날짜</label>
-          <input id="deliveryDate" name="deliveryDate" type="date" required />
+          <input
+            id="deliveryDate"
+            name="deliveryDate"
+            type="date"
+            min={isAdvanceReservation ? tomorrowValue : undefined}
+            required
+          />
         </div>
 
         <div className="field">

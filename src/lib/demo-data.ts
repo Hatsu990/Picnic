@@ -343,6 +343,39 @@ export const demoMenuItems: MenuItem[] = [
     minimumQuantity: 1,
     isAvailable: true,
   },
+  {
+    id: "reservation-fajita",
+    type: "catering",
+    category: "예약 메뉴",
+    name: "화이타",
+    description: "불향 가득한 소고기와 새우, 채소를 또띠아에 싸 먹는 멕시칸 요리. 2인 기준, 최소 하루 전 예약",
+    price: 34000,
+    imageUrl: "/images/reservation/reservation-fajita.jpg",
+    minimumQuantity: 1,
+    isAvailable: true,
+  },
+  {
+    id: "reservation-vietnamese-wrap",
+    type: "catering",
+    category: "예약 메뉴",
+    name: "월남쌈",
+    description: "신선한 채소와 고기, 해산물을 라이스페이퍼에 싸서 즐기는 베트남식 쌈 요리. 2인 기준, 최소 하루 전 예약",
+    price: 28000,
+    imageUrl: "/images/reservation/reservation-vietnamese-wrap.jpg",
+    minimumQuantity: 1,
+    isAvailable: true,
+  },
+  {
+    id: "reservation-la-gimbap",
+    type: "catering",
+    category: "예약 메뉴",
+    name: "LA 김밥",
+    description: "다양한 재료를 구운 김에 싸 먹는 오픈형 김밥 요리. 2인 기준, 최소 하루 전 예약",
+    price: 24000,
+    imageUrl: "/images/reservation/reservation-la-gimbap.jpg",
+    minimumQuantity: 1,
+    isAvailable: true,
+  },
 ];
 
 const reservations: Reservation[] = [
@@ -398,8 +431,11 @@ function buildDemoReservation(input: CreateReservationInput): Reservation {
   }
 
   const now = new Date();
-  const lineTotal = menuItem.price * input.quantity;
+  const lineTotal = menuItem.price * input.quantity + (input.extraAmount ?? 0);
   const id = crypto.randomUUID();
+  const requestNote = [input.requestNote, input.optionSummary]
+    .filter(Boolean)
+    .join("\n\n");
 
   return {
     id,
@@ -411,7 +447,7 @@ function buildDemoReservation(input: CreateReservationInput): Reservation {
     deliveryDetailAddress: input.deliveryDetailAddress,
     deliveryDate: input.deliveryDate,
     deliveryTime: input.deliveryTime,
-    requestNote: input.requestNote,
+    requestNote,
     paymentMethod: input.paymentMethod,
     reservationStatus: "pending",
     paymentStatus: null,
