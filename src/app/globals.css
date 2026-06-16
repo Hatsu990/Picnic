@@ -205,6 +205,42 @@ button.primary {
   padding: 18px;
 }
 
+.store-story {
+  align-items: center;
+  display: grid;
+  gap: 34px;
+  grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1.3fr);
+}
+
+.store-copy {
+  max-width: 520px;
+}
+
+.store-gallery {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1.15fr 0.85fr;
+}
+
+.store-photo {
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.store-photo.wide {
+  aspect-ratio: 16 / 9;
+  grid-column: 1 / -1;
+}
+
+.store-photo.tall {
+  aspect-ratio: 3 / 4;
+  grid-row: span 2;
+}
+
 .tag {
   color: var(--tomato);
   font-size: 13px;
@@ -366,6 +402,8 @@ th {
 
   .hero,
   .card-grid,
+  .store-story,
+  .store-gallery,
   .steps,
   .filter-row,
   .form-grid {
