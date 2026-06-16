@@ -49,3 +49,11 @@
 - 확인한 원인과 단서: 처음 `npm run check:supabase`에서 `fetch failed`와 `ENOTFOUND`가 발생했다. 복사한 JWT의 `ref`를 확인한 결과 실제 프로젝트 ref는 `rkctmybesyatvgriwfke`였고, 로컬 URL에는 `rkctmybesyatvgrivvfke`로 잘못 적혀 있었다.
 - 적용한 변경 사항: `.env.local`의 Supabase URL을 실제 프로젝트 ref 기준으로 수정했다. 비밀 키 값은 로그와 회고에 남기지 않았다.
 - 검증 결과: DNS 확인이 성공했고 `npm run check:supabase`에서 `menu_items: 30`, `reservations: 0`을 확인했다. `npm run dev -- -p 3000`으로 앱을 띄운 뒤 `/menu`에서 연어 포케, 핸드드립 iced, 말차 스콘, 플레인 휘낭시에가 HTML에 포함되는 것을 확인했다.
+
+## 2026-06-16 - 네이버 플레이스 메뉴 이미지 적용
+
+- 사용자 의도: 사용자가 직접 올린 네이버 플레이스의 메뉴 사진을 일일이 내려받지 않고, 현재 소풍 메뉴 30개에 각각 적용하길 원했다.
+- 진행한 요청: 네이버 지도 소풍 플레이스 메뉴 탭을 열고, 브라우저 네트워크 요청에서 실제 메뉴 이미지 URL을 추출했다.
+- 확인한 원인과 단서: 네이버 메뉴 탭에는 메뉴 이미지 30개와 별도 메뉴판 이미지 3개가 함께 로드되어 있었다. 메뉴판 이미지는 제외하고 메뉴 리스트 노출 순서 기준으로 30개만 매칭했다.
+- 적용한 변경 사항: `public/images/menu`에 메뉴별 이미지 30장을 저장하고, `src/lib/demo-data.ts`, `supabase/seed.sql`, `supabase/setup-all.sql`, 실제 Supabase `menu_items.image_url`을 모두 `/images/menu/...` 경로로 갱신했다.
+- 검증 결과: `npm run check:supabase`, `npm run typecheck`, `npm run build`가 통과했다. 로컬 `/menu`에서 30개 메뉴 이미지가 모두 `320x320`으로 로드되는 것을 확인했고, 데스크톱/모바일 화면에서 카드 이미지가 정상 표시되는 것을 확인했다.
