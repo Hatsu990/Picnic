@@ -22,10 +22,26 @@ create table if not exists public.menu_items (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.customer_profiles (
+  id uuid primary key default gen_random_uuid(),
+  provider text not null check (provider in ('naver')),
+  provider_user_id text not null,
+  email text,
+  name text,
+  nickname text,
+  avatar_url text,
+  marketing_consent boolean not null default false,
+  last_login_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (provider, provider_user_id)
+);
+
 create table if not exists public.reservations (
   id uuid primary key default gen_random_uuid(),
   reservation_number text not null unique,
   order_type text not null check (order_type in ('picnic', 'lunchbox', 'catering')),
+  customer_profile_id uuid references public.customer_profiles(id),
   customer_name text not null,
   customer_phone text not null,
   delivery_address text not null,
@@ -43,6 +59,12 @@ create table if not exists public.reservations (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.reservations
+  add column if not exists customer_profile_id uuid references public.customer_profiles(id);
+
+create index if not exists reservations_customer_profile_id_idx
+  on public.reservations(customer_profile_id);
 
 create table if not exists public.reservation_items (
   id uuid primary key default gen_random_uuid(),
@@ -75,6 +97,7 @@ create table if not exists public.reviews (
 
 alter table public.menu_categories enable row level security;
 alter table public.menu_items enable row level security;
+alter table public.customer_profiles enable row level security;
 alter table public.reservations enable row level security;
 alter table public.reservation_items enable row level security;
 alter table public.admin_users enable row level security;

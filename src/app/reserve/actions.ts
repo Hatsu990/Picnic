@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { getCurrentCustomer } from "@/lib/customer-auth";
 import { createReservation, getMenuItems } from "@/lib/data";
 import {
   getKoreaDateValue,
@@ -114,8 +115,10 @@ export async function createReservationAction(formData: FormData) {
     ].join("\n");
   }
 
+  const customer = await getCurrentCustomer();
   const reservation = await createReservation({
     ...parsed.data,
+    customerProfileId: customer?.id,
     optionSummary,
     extraAmount,
   });

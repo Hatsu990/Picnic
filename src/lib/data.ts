@@ -5,6 +5,7 @@ import {
   getDemoReservations,
   updateDemoReservationStatus,
 } from "./demo-data";
+import { normalizePhone } from "./phone";
 import { createSupabaseAdminClient } from "./supabase";
 import type {
   CreateReservationInput,
@@ -58,23 +59,29 @@ export async function createReservation(
     .filter(Boolean)
     .join("\n\n");
 
+  const reservationInsert: any = {
+    id: reservationId,
+    reservation_number: reservationNumber,
+    order_type: input.orderType,
+    customer_name: input.customerName,
+    customer_phone: input.customerPhone,
+    delivery_address: input.deliveryAddress,
+    delivery_detail_address: input.deliveryDetailAddress,
+    delivery_date: input.deliveryDate,
+    delivery_time: input.deliveryTime,
+    request_note: requestNote,
+    payment_method: input.paymentMethod,
+    reservation_status: "pending",
+    total_amount: totalAmount,
+  };
+
+  if (input.customerProfileId) {
+    reservationInsert.customer_profile_id = input.customerProfileId;
+  }
+
   const { data: reservation, error: reservationError } = await supabase
     .from("reservations")
-    .insert({
-      id: reservationId,
-      reservation_number: reservationNumber,
-      order_type: input.orderType,
-      customer_name: input.customerName,
-      customer_phone: input.customerPhone,
-      delivery_address: input.deliveryAddress,
-      delivery_detail_address: input.deliveryDetailAddress,
-      delivery_date: input.deliveryDate,
-      delivery_time: input.deliveryTime,
-      request_note: requestNote,
-      payment_method: input.paymentMethod,
-      reservation_status: "pending",
-      total_amount: totalAmount,
-    })
+    .insert(reservationInsert)
     .select()
     .single();
 
@@ -95,6 +102,7 @@ export async function createReservation(
     id: reservation.id,
     reservationNumber: reservation.reservation_number,
     orderType: reservation.order_type,
+    customerProfileId: reservation.customer_profile_id ?? null,
     customerName: reservation.customer_name,
     customerPhone: reservation.customer_phone,
     deliveryAddress: reservation.delivery_address,
@@ -148,6 +156,34 @@ export async function getReservations(status?: ReservationStatus) {
   return data.map(mapReservationRow);
 }
 
+export async function getReservationsByCustomerProfileId(customerProfileId: string) {
+  const supabase = createSupabaseAdminClient();
+  if (!supabase) {
+    return getDemoReservations().filter(
+      (reservation) => reservation.customerProfileId === customerProfileId,
+    );
+  }
+
+  const { data, error } = await supabase
+    .from("reservations")
+    .select("*, reservation_items(*)")
+    .eq("customer_profile_id", customerProfileId)
+    .order("created_at", { ascending: false });
+
+  if (error) return [];
+  return data.map(mapReservationRow);
+}
+
+export async function getReservationsByPhone(phone: string) {
+  const normalizedPhone = normalizePhone(phone);
+  if (!normalizedPhone) return [];
+
+  const reservations = await getReservations();
+  return reservations.filter(
+    (reservation) => normalizePhone(reservation.customerPhone) === normalizedPhone,
+  );
+}
+
 export async function getReservationById(id: string) {
   const supabase = createSupabaseAdminClient();
   if (!supabase) return getDemoReservationById(id);
@@ -187,6 +223,7 @@ function mapReservationRow(row: any): Reservation {
     id: row.id,
     reservationNumber: row.reservation_number,
     orderType: row.order_type,
+    customerProfileId: row.customer_profile_id ?? null,
     customerName: row.customer_name,
     customerPhone: row.customer_phone,
     deliveryAddress: row.delivery_address,

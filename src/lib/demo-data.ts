@@ -441,6 +441,7 @@ function buildDemoReservation(input: CreateReservationInput): Reservation {
     id,
     reservationNumber: `PIC-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${id.slice(0, 6).toUpperCase()}`,
     orderType: input.orderType,
+    customerProfileId: input.customerProfileId ?? null,
     customerName: input.customerName,
     customerPhone: input.customerPhone,
     deliveryAddress: input.deliveryAddress,

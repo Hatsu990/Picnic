@@ -9,6 +9,8 @@ Supabase 대시보드의 SQL Editor에서 아래 순서로 실행합니다.
 1. `supabase/schema.sql`
 2. `supabase/seed.sql`
 
+이미 기존 테이블이 만들어진 상태에서 네이버 로그인/마이페이지 기능만 추가한다면 `supabase/customer-auth.sql`만 추가로 실행해도 됩니다.
+
 `schema.sql`은 테이블과 RLS 정책을 만들고, `seed.sql`은 현재 소풍 메뉴를 넣습니다.
 
 ## 2. `.env.local` 작성

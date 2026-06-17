@@ -33,6 +33,7 @@ export type Reservation = {
   id: string;
   reservationNumber: string;
   orderType: OrderType;
+  customerProfileId: string | null;
   customerName: string;
   customerPhone: string;
   deliveryAddress: string;
@@ -56,6 +57,7 @@ export type CreateReservationInput = {
   orderType: OrderType;
   menuItemId: string;
   quantity: number;
+  customerProfileId?: string;
   customerName: string;
   customerPhone: string;
   deliveryAddress: string;
@@ -66,4 +68,18 @@ export type CreateReservationInput = {
   paymentMethod: PaymentMethod;
   optionSummary?: string;
   extraAmount?: number;
+};
+
+export type CustomerProfile = {
+  id: string;
+  provider: "naver";
+  providerUserId: string;
+  email: string | null;
+  name: string | null;
+  nickname: string | null;
+  avatarUrl: string | null;
+  marketingConsent: boolean;
+  lastLoginAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 };

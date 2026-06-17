@@ -73,3 +73,11 @@
 - 확인한 원인과 단서: 캡처 이미지 기준 예약 메뉴는 2인 가격이지만 사이트 예약 최소 수량은 1개로 두고, 설명과 안내 문구에 2인 기준 및 최소 하루 전 예약을 명시했다. Supabase 실제 DB 갱신 중 PowerShell 인코딩 문제로 한글이 깨질 수 있어 브라우저 렌더링과 DB 조회로 재확인했다.
 - 적용한 변경 사항: `src/lib/reservation-options.ts`에 포케 옵션과 하루 전 예약 대상 메뉴를 분리했다. 예약 생성 로직은 옵션 요약과 추가금을 받아 총액과 요청사항에 반영하게 수정했다. 예약 메뉴 이미지 3개를 `public/images/reservation`에 추가하고 demo data, Supabase seed/setup SQL, 실제 Supabase DB를 33개 메뉴로 맞췄다.
 - 검증 결과: `/menu?type=catering`에서 예약 메뉴 3개와 경고 문구가 정상 표시됐다. `/reserve?type=picnic&menuItemId=poke-salmon`에서 드레싱 5개와 토핑 5개가 보이는 것을 확인했다. 테스트 예약을 실제로 접수해 총액 26,000원과 포케 옵션 요약 저장을 확인한 뒤 테스트 row를 삭제했다. `npm run typecheck`, `npm run build`, `npm run check:supabase`가 통과했다.
+
+## 2026-06-17 - 네이버 로그인과 예약 조회 범위 조정
+
+- 사용자 의도: 게스트는 로그인 없이 전화번호로 자기 예약을 조회하고, 로그인 기능은 네이버 로그인부터 붙이기로 했다. 결제, 리뷰, Solapi 문자 발송, 마케팅 자동화, 운영자 메뉴 CRUD, 배포 QA는 이번 범위에서 제외하고 후속 작업으로 남기길 원했다.
+- 진행한 요청: 네이버 OAuth 직접 연동 route, 고객 세션 쿠키, 마이페이지, 전화번호 기반 게스트 예약 조회 화면을 추가했다. 로그인 상태에서 접수한 예약은 고객 프로필 id와 연결되도록 예약 생성 로직을 확장했다.
+- 확인한 원인과 단서: SQL 파일은 DB 구조를 정의하지만 Supabase 실제 DB에는 SQL Editor에서 실행해야 반영된다. 네이버 로그인은 SQL만으로 작동하지 않고 네이버 개발자 Client ID/Secret, 콜백 URL, 앱 route 처리가 함께 필요하다.
+- 적용한 변경 사항: `customer_profiles` 테이블과 `reservations.customer_profile_id` 컬럼을 추가하는 SQL을 준비했다. `docs/naver-login-setup.md`에 네이버 개발자 센터와 `.env.local` 설정을 정리했고, `docs/later-work.md`에 Solapi/마케팅 자동화/결제·운영 후속 작업을 기록했다.
+- 검증 결과: `/login`, `/reservations`, `/mypage` 화면 렌더링을 확인했다. 네이버 키가 없을 때 `/auth/naver/start`가 로그인 설정 오류 화면으로 안전하게 돌아오는 것을 확인했다. 게스트 전화번호 조회 폼 제출 후 빈 결과 상태가 표시됐다. `npm run typecheck`, `npm run build`, `npm run check:supabase`가 통과했다.
