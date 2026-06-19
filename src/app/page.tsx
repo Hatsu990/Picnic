@@ -26,7 +26,7 @@ const storePhotos = [
 ];
 
 export default async function HomePage() {
-  const featuredItems = (await getMenuItems()).slice(0, 3);
+  const featuredItems = (await getMenuItems()).slice(0, 4);
 
   return (
     <>
@@ -35,8 +35,9 @@ export default async function HomePage() {
           <p className="eyebrow">소풍 카페 메뉴 · 예약 주문</p>
           <h1>Picnic</h1>
           <p>
-            포케, 커피, 블렌딩 티, 라떼, 에이드, 디저트를 한눈에 보고
-            원하는 날짜에 예약 요청을 남겨주세요.
+            포케와 음료, 예약 메뉴를 한 번에 고르고 원하는 날짜에 받을 수
+            있게 준비합니다. 작은 모임부터 케이터링 문의까지 소풍에서
+            차분하게 접수해요.
           </p>
           <div className="action-row">
             <Link className="button primary" href="/reserve">
@@ -48,30 +49,26 @@ export default async function HomePage() {
           </div>
         </div>
         <div className="hero-panel" aria-label="Picnic 대표 예약 정보">
-          <img
-            className="hero-image"
-            src="/images/picnic-hero.png"
-            alt="Picnic 소풍 메뉴 이미지"
-          />
           <div>
             <span className="metric">33종</span>
-            <span>소풍 메뉴 등록</span>
+            <span>현재 등록 메뉴</span>
           </div>
           <div>
-            <span className="metric">5종</span>
-            <span>포케 메뉴</span>
+            <span className="metric">1일 전</span>
+            <span>예약 메뉴 접수 기준</span>
           </div>
           <div>
-            <span className="metric">추가 예정</span>
-            <span>도시락 메뉴</span>
+            <span className="metric">네이버</span>
+            <span>로그인 예약 조회</span>
           </div>
         </div>
       </section>
 
-      <section className="section">
+      <section className="section section-featured">
         <div className="section-heading">
           <p className="eyebrow">대표 메뉴</p>
-          <h2>소풍 메뉴</h2>
+          <h2>오늘 고르기 좋은 메뉴</h2>
+          <p>실제 사진과 가격이 바로 읽히도록 대표 메뉴를 먼저 정리했습니다.</p>
         </div>
         <div className="card-grid">
           {featuredItems.map((item) => (
@@ -85,7 +82,15 @@ export default async function HomePage() {
                 <p className="tag">{item.category}</p>
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>
-                <strong>{formatCurrency(item.price)}</strong>
+                <div className="card-footer">
+                  <strong>{formatCurrency(item.price)}</strong>
+                  <Link
+                    className="text-link"
+                    href={`/reserve?type=${item.type}&menuItemId=${item.id}`}
+                  >
+                    예약
+                  </Link>
+                </div>
               </div>
             </article>
           ))}
@@ -117,12 +122,25 @@ export default async function HomePage() {
         <div className="section-heading">
           <p className="eyebrow">운영 흐름</p>
           <h2>예약 접수 후 운영자가 확인합니다</h2>
+          <p>결제 연동 전까지는 예약 내용을 먼저 확인하고 연락드리는 흐름입니다.</p>
         </div>
         <div className="steps">
-          <div>메뉴 선택</div>
-          <div>날짜와 주소 입력</div>
-          <div>예약 접수</div>
-          <div>운영자 확정</div>
+          <div>
+            <span>01</span>
+            메뉴 선택
+          </div>
+          <div>
+            <span>02</span>
+            날짜와 주소 입력
+          </div>
+          <div>
+            <span>03</span>
+            예약 접수
+          </div>
+          <div>
+            <span>04</span>
+            운영자 확정
+          </div>
         </div>
       </section>
     </>
