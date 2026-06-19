@@ -81,3 +81,11 @@
 - 확인한 원인과 단서: SQL 파일은 DB 구조를 정의하지만 Supabase 실제 DB에는 SQL Editor에서 실행해야 반영된다. 네이버 로그인은 SQL만으로 작동하지 않고 네이버 개발자 Client ID/Secret, 콜백 URL, 앱 route 처리가 함께 필요하다.
 - 적용한 변경 사항: `customer_profiles` 테이블과 `reservations.customer_profile_id` 컬럼을 추가하는 SQL을 준비했다. `docs/naver-login-setup.md`에 네이버 개발자 센터와 `.env.local` 설정을 정리했고, `docs/later-work.md`에 Solapi/마케팅 자동화/결제·운영 후속 작업을 기록했다.
 - 검증 결과: `/login`, `/reservations`, `/mypage` 화면 렌더링을 확인했다. 네이버 키가 없을 때 `/auth/naver/start`가 로그인 설정 오류 화면으로 안전하게 돌아오는 것을 확인했다. 게스트 전화번호 조회 폼 제출 후 빈 결과 상태가 표시됐다. `npm run typecheck`, `npm run build`, `npm run check:supabase`가 통과했다.
+## 2026-06-20 - 결제/문자 준비와 운영자 메뉴 관리
+
+- 사용자 의도: 네이버 로그인/예약/조회/관리자/마이페이지 흐름을 자동으로 확인하고, 네이버페이와 Solapi는 실제 키가 준비되면 붙일 수 있게 코드 기반을 먼저 마련하기를 원했다. 운영자가 직접 메뉴를 수정할 수 있는 화면도 필요했다.
+- 진행한 요청: 네이버페이 승인 요청 준비 모듈, 네이버페이 반환 페이지, Solapi 서버 전용 문자 발송 래퍼, 운영자 메뉴 관리 화면을 추가했다.
+- 확인한 원인과 단서: 네이버페이는 결제창 완료 후 `paymentId`를 받아 서버에서 승인 API를 호출해야 하며, Client Secret은 브라우저에 노출하면 안 된다. Solapi SDK는 서버 전용 패키지라서 서버 함수에서만 동적 import로 사용하도록 했다.
+- 적용한 변경 사항: `/admin/menu`에서 메뉴명, 설명, 가격, 최소 수량, 정렬 순서, 노출 여부를 수정할 수 있게 했다. `.env.example`과 `docs/naver-pay-setup.md`, `docs/solapi-setup.md`에 필요한 환경변수와 남은 운영 작업을 정리했다.
+- 검증 결과: `npm run typecheck`, `npm run build`, `npm run check:supabase`가 통과했다. Chrome 자동 QA로 연어 포케 예약 생성, 포케 옵션 금액 DB 저장, 전화번호 예약 조회, 관리자 메뉴 화면 접근, 네이버 고객 프로필에 연결된 예약 DB 조회를 확인했다. 테스트 예약 데이터는 삭제했고 Supabase `reservations: 0` 상태를 재확인했다.
+- 다음 주의사항: 실제 네이버페이 결제 노출 전에는 가맹/심사 완료, 운영 API 도메인/키 설정, 승인 성공 시 `payment_status` 갱신, 실패/취소 UX가 필요하다. Solapi 실제 발송 전에는 발신번호 인증과 수신동의/광고문자 정책을 정해야 한다.

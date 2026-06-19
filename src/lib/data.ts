@@ -9,6 +9,7 @@ import { normalizePhone } from "./phone";
 import { createSupabaseAdminClient } from "./supabase";
 import type {
   CreateReservationInput,
+  AdminMenuItem,
   MenuItem,
   Reservation,
   ReservationStatus,
@@ -39,6 +40,66 @@ export async function getMenuItems(): Promise<MenuItem[]> {
     minimumQuantity: item.minimum_quantity,
     isAvailable: item.is_available,
   }));
+}
+
+export async function getAdminMenuItems(): Promise<AdminMenuItem[]> {
+  const supabase = createSupabaseAdminClient();
+  if (!supabase) {
+    return getDemoMenuItems().map((item, index) => ({
+      ...item,
+      sortOrder: index,
+    }));
+  }
+
+  const { data, error } = await supabase
+    .from("menu_items")
+    .select("*")
+    .order("sort_order", { ascending: true });
+
+  if (error) throw new Error(error.message);
+
+  return data.map((item) => ({
+    id: item.id,
+    type: item.type,
+    category: item.category ?? item.type,
+    name: item.name,
+    description: item.description,
+    price: item.price,
+    imageUrl:
+      item.image_url ??
+      (item.type === "lunchbox" ? "/images/lunchbox.png" : "/images/catering.png"),
+    minimumQuantity: item.minimum_quantity,
+    isAvailable: item.is_available,
+    sortOrder: item.sort_order,
+  }));
+}
+
+export async function updateMenuItem(input: {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  minimumQuantity: number;
+  isAvailable: boolean;
+  sortOrder: number;
+}) {
+  const supabase = createSupabaseAdminClient();
+  if (!supabase) return null;
+
+  const { error } = await supabase
+    .from("menu_items")
+    .update({
+      name: input.name,
+      description: input.description,
+      price: input.price,
+      minimum_quantity: input.minimumQuantity,
+      is_available: input.isAvailable,
+      sort_order: input.sortOrder,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", input.id);
+
+  if (error) throw new Error(error.message);
 }
 
 export async function createReservation(

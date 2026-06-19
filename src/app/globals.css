@@ -518,6 +518,17 @@ th {
   justify-content: space-between;
 }
 
+.admin-menu-list {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.admin-menu-card {
+  display: grid;
+  gap: 18px;
+}
+
 @media (max-width: 820px) {
   .site-header {
     align-items: flex-start;

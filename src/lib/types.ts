@@ -20,6 +20,10 @@ export type MenuItem = {
   isAvailable: boolean;
 };
 
+export type AdminMenuItem = MenuItem & {
+  sortOrder: number;
+};
+
 export type ReservationItem = {
   id: string;
   menuItemId: string;

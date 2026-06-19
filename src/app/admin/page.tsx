@@ -35,6 +35,9 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         <h1>예약 관리</h1>
         <p>접수된 예약을 확인하고 상태를 변경합니다.</p>
         <div className="action-row">
+          <Link className="button secondary" href="/admin/menu">
+            메뉴 관리
+          </Link>
           <a className="button secondary" href="/admin/logout">
             로그아웃
           </a>
