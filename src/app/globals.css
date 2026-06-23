@@ -91,8 +91,8 @@ img {
 
 .hero::before {
   background:
-    linear-gradient(90deg, rgba(251, 247, 239, 0.98) 0%, rgba(251, 247, 239, 0.88) 42%, rgba(251, 247, 239, 0.2) 100%),
-    url("/images/picnic-hero.png") right center / min(54vw, 720px) auto no-repeat;
+    linear-gradient(90deg, rgba(251, 247, 239, 0.98) 0%, rgba(251, 247, 239, 0.9) 42%, rgba(251, 247, 239, 0.34) 100%),
+    url("/images/menu/poke-salmon.jpg") right center / min(47vw, 620px) auto no-repeat;
   content: "";
   inset: 0;
   position: absolute;
@@ -227,6 +227,13 @@ button.secondary {
   overflow: hidden;
 }
 
+.hero-panel::before {
+  background: var(--leaf);
+  content: "";
+  display: block;
+  height: 5px;
+}
+
 .hero-panel > div,
 .summary-row,
 .steps > div {
@@ -276,6 +283,13 @@ button.secondary {
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.menu-card:hover {
+  border-color: rgba(47, 93, 70, 0.45);
+  box-shadow: 0 14px 28px rgba(77, 58, 36, 0.1);
+  transform: translateY(-2px);
 }
 
 .menu-image {
@@ -308,6 +322,11 @@ button.secondary {
   justify-content: space-between;
   margin-top: auto;
   padding-top: 14px;
+}
+
+.card-footer strong {
+  color: var(--ink);
+  font-size: 16px;
 }
 
 .store-story {
@@ -511,6 +530,10 @@ textarea,
   width: 100%;
 }
 
+select {
+  cursor: pointer;
+}
+
 input:focus,
 select:focus,
 textarea:focus {
@@ -651,7 +674,7 @@ th {
   .hero::before {
     background:
       linear-gradient(90deg, rgba(251, 247, 239, 0.98) 0%, rgba(251, 247, 239, 0.9) 56%, rgba(251, 247, 239, 0.35) 100%),
-      url("/images/picnic-hero.png") right center / 58vw auto no-repeat;
+      url("/images/menu/poke-salmon.jpg") right center / 54vw auto no-repeat;
   }
 }
 
@@ -687,8 +710,8 @@ th {
   .hero::before {
     background:
       linear-gradient(180deg, rgba(251, 247, 239, 0.96) 0%, rgba(251, 247, 239, 0.94) 58%, rgba(251, 247, 239, 0.8) 100%),
-      url("/images/picnic-hero.png") right top / 86vw auto no-repeat;
-    opacity: 0.85;
+      url("/images/menu/poke-salmon.jpg") right 18px / 76vw auto no-repeat;
+    opacity: 0.72;
   }
 
   .hero-panel {
